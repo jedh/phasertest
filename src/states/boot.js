@@ -11,7 +11,6 @@ TestGame.boot.prototype = {
 	
 	preload: function() {
 		// Load any assets needed for the loading (backgrounds, loading bars, etc.)
-		alert('boot');
 	},
 	
 	create: function() {
