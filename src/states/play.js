@@ -47,7 +47,5 @@ TestGame.Play.prototype = {
 			this.player.animations.stop();
 			this.player.frame = 4;
 		}
-		
-		
 	}
 };
