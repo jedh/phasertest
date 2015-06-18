@@ -1,10 +1,10 @@
 var TestGame = {};
 
-TestGame.boot = function (game) {
+TestGame.Boot = function (game) {
 
 };
 
-TestGame.boot.prototype = {
+TestGame.Boot.prototype = {
 	init: function() {
 		this.physics.startSystem(Phaser.Physics.ARCADE);
 	},
@@ -16,6 +16,6 @@ TestGame.boot.prototype = {
 	create: function() {
 		// Everything should be loaded into cache by now.
 		// It's now safe to start the real loading.
-		this.state.start('load');
+		this.state.start('Load');
 	}
 }
