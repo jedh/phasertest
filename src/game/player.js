@@ -1,9 +1,17 @@
 var Player = function (game, x, y, name) {
 	Entity.apply(this, [game, x, y, name]);
+	this.title = 'player';
+	this.scale.setTo(1.75, 1.75);
+	game.physics.arcade.enable(this);
+	this.body.bounce.y = 0.2;
+	this.body.gravity.y = 500;
+	this.body.collideWorldBounds = true;
+	this.animations.add('walk', [5, 6, 7, 8], 10, true);
+	this.speedX = 350;	
 };
 
-//Player.prototype = new Entity(game, x, y, name);
 Player.prototype = Object.create(Entity.prototype);
+Player.prototype.constructor = Player;
 
 Player.prototype.update = function (game) {
 	if (this.body.velocity.x != 0) {

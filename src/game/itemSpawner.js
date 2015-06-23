@@ -18,31 +18,21 @@ ItemSpawner.prototype.spawnHazard = function(game) {
 	
 	if (hazard) {		
 		// Not sure this is needed, maybe if we need alive to be true?
-		// The reset method seems to work despite docs not saying alive is set to true.
-		hazard.lifetime = 0; 		
+		// The reset method seems to work despite docs not saying alive is set to true.	
 		hazard.alpha = 1;		
-		hazard.reset(game.world.randomX, -40);
+		hazard.reset(game.world.randomX, -40);		
 		// hazard.revive();
 		// hazard.alive = true;
-		if (game.rnd.between(0, 1) > 0)	{
-			hazard.scale.x = -hazard.scale.x;
-			hazard.body.gravity.y = game.rnd.between(300, 400);
-		}
-
 	}
 	else {
-		hazard = this.hazardGroup.create(game.world.randomX, -40, 'monster');
-		hazard.name = 'hazard';
-		//hazard.body.collideWorldBounds = true;
-		hazard.anchor.setTo(0.5, 0.5);
-		hazard.scale.setTo(1.5, 1.5);
-		//hazard.body.bounce.y = 0.2;
-		hazard.body.gravity.y = game.rnd.between(300, 400);
-		hazard.animations.add('walk', [2, 3], 6, true);
-		hazard.animations.play('walk');
-		if (game.rnd.between(0, 1) > 0)	{
-			hazard.scale.x = -hazard.scale.x;
-		}	
+		hazard = new Hazard(game, game.world.randomX, -40, 'monster');
+		this.hazardGroup.add(hazard);
+		hazard.animations.play('walk');			
+	}
+	
+	hazard.body.gravity.y = game.rnd.between(300, 400);
+	if (game.rnd.between(0, 1) > 0)	{
+		hazard.scale.x = -hazard.scale.x;			
 	}
 };
 
