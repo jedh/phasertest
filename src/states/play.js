@@ -8,6 +8,11 @@ TestGame.Play = function (game) {
 	this.score = 0; // Could look at making this a game global.
 	this.cameraShakeTween;
 	this.gameOver = false;
+	this.bodyCheckScore = 100;
+	this.dropKickScore = 180;
+	this.playerHitScore = -50;
+	this.hazardHitScoreText;
+	this.groundHitScoreText;
 };
 
 TestGame.Play.prototype = {	
@@ -24,7 +29,7 @@ TestGame.Play.prototype = {
 		ground.body.immovable = true;
 		
 		this.hazardGroup = this.add.group();
-		this.hazardGroup.enableBody = true;	
+		this.hazardGroup.enableBody = true;		
 		this.hazardGroup.physicsBodyType = Phaser.Physics.ARCADE;
 		
 		this.itemSpawner = new ItemSpawner(game, this.hazardGroup);			
@@ -39,8 +44,24 @@ TestGame.Play.prototype = {
 			align: 'center'
 		});
 		this.scoreText.setShadow(3, 3, 'rgba(255, 102, 255, 0.6)', 0);
-		this.updateScore();		
-		//this.scoreText.anchor.setTo(0.5, 0.5);
+		this.updateScore();						
+		//this.scoreText.anchor.setTo(0.5, 0.5);				
+		
+		this.hazardHitScoreText = new Phaser.Text(game, 100, 100, '0', {
+			font: '28px Arial Black',
+			fill: '#FF9933',
+			align: 'center'
+		});
+		this.hazardHitScoreText.setShadow(3, 3, 'rgba(255, 102, 255, 0.6)', 0);	
+		this.hazardHitScoreText.anchor.set(0.5);	
+		
+		this.groundHitScoreText = new Phaser.Text(game, 100, 100, '0', {
+			font: '28px Arial Black',
+			fill: '#FF5050',
+			align: 'center'
+		});
+		this.groundHitScoreText.setShadow(3, 3, 'rgba(255, 255, 102, 0.6)', 0);	
+		this.groundHitScoreText.anchor.set(0.5);	
 		
 		this.cursors = this.game.input.keyboard.createCursorKeys();		
 					
@@ -104,7 +125,8 @@ TestGame.Play.prototype = {
 		// }, this);
 		
 		if (!this.gameOver) {
-			this.score -= 50;
+			this.score += this.playerHitScore;
+			this.showGroundHitScoreText(this.playerHitScore, hazard.x);
 			this.updateScore();
 		}
 		
@@ -132,11 +154,16 @@ TestGame.Play.prototype = {
 		this.scoreText.setText('SCORE: ' + this.score);
 	},
 	
-	hazardHit: function(hazard) {
-		this.score += 100;
+	hazardHit: function(hazard) {		
 		if (this.player.isAirborne) {
-			this.score += 80;
+			this.score += this.dropKickScore;
+			this.showHazardHitScoreText(this.dropKickScore, this.player.x, this.player.y);
 		}
+		else
+		{
+			this.score += this.bodyCheckScore;
+			this.showHazardHitScoreText(this.bodyCheckScore, this.player.x, this.player.y);
+		}				
 		
 		this.updateScore();
 		hazard.body.velocity.x = 400;
@@ -147,5 +174,27 @@ TestGame.Play.prototype = {
 		hazard.alive = false;
 		hazard.lifespan = 500;
 		game.add.tween(hazard).to( {alpha: 0}, 450, 'Linear', true);
+	},
+	
+	showHazardHitScoreText: function(score, x, y) {
+		this.hazardHitScoreText.revive();
+		this.hazardHitScoreText.alpha = 1;		
+		this.hazardHitScoreText.x = x;
+		this.hazardHitScoreText.y = y - (this.player.height * .5) - 10;
+		this.hazardHitScoreText.text = "+" + score;
+		game.add.existing(this.hazardHitScoreText);
+		game.add.tween(this.hazardHitScoreText).to( { alpha: 0 }, 1000, 'Linear', true);
+		this.hazardHitScoreText.lifespan = 1000;			
+	},	
+	
+	showGroundHitScoreText: function(score, x) {
+		this.groundHitScoreText.revive();
+		this.groundHitScoreText.alpha = 1;		
+		this.groundHitScoreText.x = x;
+		this.groundHitScoreText.y = game.world.height - 170;
+		this.groundHitScoreText.text = score;
+		game.add.existing(this.groundHitScoreText);
+		game.add.tween(this.groundHitScoreText).to( { alpha: 0 }, 1000, 'Linear', true);
+		this.groundHitScoreText.lifespan = 1000;			
 	}	
 };

@@ -1,6 +1,6 @@
 var Player = function (game, x, y, name) {
 	Entity.apply(this, [game, x, y, name]);
-	this.title = 'player';
+	this.title = 'player';	
 	this.scale.setTo(1.75, 1.75);
 	game.physics.arcade.enable(this);
 	this.body.bounce.y = 0.2;
