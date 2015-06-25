@@ -35,7 +35,7 @@ TestGame.Play.prototype = {
 		this.itemSpawner = new ItemSpawner(game, this.hazardGroup);			
 		
 		//this.player = Entity.getPlayer(game, game.world.centerX, game.world.height - 200);
-		this.player = new Player(game, game.world.centerX, game.world.height - 200, 'player');
+		this.player = Player(game, game.world.centerX, game.world.height - 200, 'player');
 		game.add.existing(this.player);
 		
 		this.scoreText = game.add.text(12, 0, "", {
@@ -93,7 +93,7 @@ TestGame.Play.prototype = {
 		}
 		else {
 			if (this.cursors.down.isDown) {
-				this.restartGame();
+				this.restartGame();				
 			}
 		}
 	},
@@ -143,6 +143,7 @@ TestGame.Play.prototype = {
 	},
 	
 	restartGame: function() {
+		this.itemSpawner.reset();
 		this.score = 0;
 		this.updateScore();
 		this.gameOver = false;
